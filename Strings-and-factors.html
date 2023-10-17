@@ -487,8 +487,30 @@ as.numeric(vec_sex)</code></pre>
 as.numeric(vec_sex)</code></pre>
 <pre><code>## [1] 1 1 2 2</code></pre>
 </div>
-<div id="nsduh" class="section level2">
-<h2>NSDUH</h2>
+<div id="nsduh-strings" class="section level2">
+<h2>NSDUH – Strings</h2>
+<pre class="r"><code>nsduh_url = &quot;http://samhda.s3-us-gov-west-1.amazonaws.com/s3fs-public/field-uploads/2k15StateFiles/NSDUHsaeShortTermCHG2015.htm&quot;
+
+table_marj = 
+  read_html(nsduh_url) |&gt; 
+  html_table() |&gt; 
+  first() |&gt;
+  slice(-1)</code></pre>
+<pre class="r"><code>data_marj = 
+  table_marj |&gt;
+  select(-contains(&quot;P Value&quot;)) |&gt;
+  pivot_longer(
+    -State,
+    names_to = &quot;age_year&quot;,
+    values_to = &quot;percent&quot;
+  ) |&gt;
+  separate(age_year, into = c(&quot;age&quot;, &quot;year&quot;), sep = &quot;\\(&quot;)|&gt;
+  mutate(
+    year = str_replace(year, &quot;\\)&quot;, &quot;&quot;),
+    percent = str_replace(percent, &quot;[a-c]$&quot;, &quot;&quot;),
+    percent = as.numeric(percent)
+  )|&gt;
+  filter(!(State %in% c(&quot;Total U.S.&quot;, &quot;Northeast&quot;, &quot;Midwest&quot;, &quot;South&quot;, &quot;West&quot;)))</code></pre>
 </div>
 
 
