@@ -1,0 +1,152 @@
+---
+title: "Strings and factors"
+output: html_document
+date: "2023-10-17"
+---
+
+load the necessary libraries
+
+```{r}
+library(tidyverse)
+library(p8105.datasets)
+library(rvest)
+library(httr)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
+
+options(
+  ggplot2.continuous.color = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Strings and regex
+
+detect a pattern in the strings - detect "jeff" in the strings
+if we change jeff to Jeff, it will publish all False
+```{r}
+string_vec = c("my", "name", "is", "jeff")
+
+str_detect(string_vec, "jeff")
+```
+
+detect a pattern in the strings - detect "e" in the strings
+```{r}
+string_vec = c("my", "name", "is", "jeff")
+
+str_detect(string_vec, "e")
+```
+
+Replace detected pattern to a new pattern
+```{r}
+string_vec = c("my", "name", "is", "jeff")
+
+str_detect(string_vec, "jeff")
+str_replace(string_vec, "jeff", "Jeff")
+```
+
+start with i think, but not end with i think, using `^` and `$`
+```{r}
+string_vec = c(
+  "i think we all rule for participating",
+  "i think i have been caught",
+  "i think this will be quite fun actually",
+  "it will be fun, i think"
+  )
+
+str_detect(string_vec, "^i think")
+str_detect(string_vec, "i think$")
+```
+
+More complicated
+capital or lower capital using `[]`
+```{r}
+string_vec = c(
+  "Time for a Pumpkin Spice Latte!",
+  "went to the #pumpkinpatch last weekend",
+  "Pumpkin Pie is obviously the best pie",
+  "SMASHING PUMPKINS -- LIVE IN CONCERT!!"
+  )
+str_detect(string_vec,"pumpkin")
+str_detect(string_vec,"Pumpkin")
+str_detect(string_vec,"[Pp]umpkin")
+```
+
+number first followed immediately by a letter - using `[]`
+```{r}
+string_vec = c(
+  '7th inning stretch',
+  '1st half soon to begin. Texas won the toss.',
+  'she is 5 feet 4 inches tall',
+  '3AM - cant sleep :('
+  )
+
+str_detect(string_vec, "[0-9][a-zA-Z]")
+```
+
+speical character 
+detect 7 something in betwee and 11, using `.`
+detect actual ., you need to put a \
+```{r}
+string_vec = c(
+  'Its 7:11 in the evening',
+  'want to go to 7-11?',
+  'my flight is AA711',
+  'NetBios: scanning ip 203.167.114.66'
+  )
+
+str_detect(string_vec, "7.11")
+str_detect(string_vec, "7\\.11")
+```
+
+speical character 
+```{r}
+string_vec = c(
+  'The CI is [2, 5]',
+  ':-]',
+  ':-[',
+  'I found the answer on pages [6-7]'
+  )
+
+str_detect(string_vec, "\\[")
+```
+
+## Factors
+string has ""
+factor has levels 
+```{r}
+vec_sex = factor(c("male", "male", "female", "female"))
+
+as.numeric(vec_sex)
+```
+
+what happends if i relevel ...
+```{r}
+vec_sex = fct_relevel(vec_sex, "male")
+
+as.numeric(vec_sex)
+```
+
+## NSDUH
+
+
+
+
+
+
+
+
+
+
+
+
+
